@@ -288,6 +288,13 @@
           border: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
+        .container-row.clickable {
+          cursor: pointer;
+        }
+        .container-row.clickable:focus-visible {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
         .container-row.running {
           border-color: var(--docker-card-running-color, var(--state-active-color, var(--success-color, #2e8f57)));
         }
@@ -600,6 +607,31 @@
         actions.appendChild(restartButton);
 
         row.appendChild(actions);
+
+        if (statusInfo.entityId) {
+          row.classList.add("clickable");
+          row.setAttribute("role", "button");
+          row.setAttribute("tabindex", "0");
+          const label = (name.textContent || "").trim() || "Container";
+          row.setAttribute("aria-label", `${label} details`);
+          const openDetails = () => this._showMoreInfo(statusInfo.entityId);
+          row.addEventListener("click", (event) => {
+            if (this._isInteractiveTarget(event)) {
+              return;
+            }
+            openDetails();
+          });
+          row.addEventListener("keydown", (event) => {
+            if (event.currentTarget !== event.target) {
+              return;
+            }
+            if (event.key === "Enter" || event.key === " " || event.key === "Space") {
+              event.preventDefault();
+              openDetails();
+            }
+          });
+        }
+
         list.appendChild(row);
       });
 
@@ -716,6 +748,7 @@
 
       return {
         entity,
+        entityId: stateEntityId,
         rawState,
         label,
         cssClass,
@@ -723,6 +756,30 @@
         canToggle,
         canRestart,
       };
+    }
+
+    _showMoreInfo(entityId) {
+      if (!entityId) {
+        return;
+      }
+      const event = new CustomEvent("hass-more-info", {
+        bubbles: true,
+        composed: true,
+        detail: { entityId },
+      });
+      this.dispatchEvent(event);
+    }
+
+    _isInteractiveTarget(event) {
+      if (!event || !event.target) {
+        return false;
+      }
+      const target = event.target;
+      if (target.closest(".actions")) {
+        return true;
+      }
+      const interactiveSelectors = ["button", "a", "input", "select", "textarea", "ha-switch"];
+      return interactiveSelectors.some((selector) => Boolean(target.closest(selector)));
     }
 
     _entityDomain(entityId) {
