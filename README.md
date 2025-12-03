@@ -16,15 +16,15 @@ A simple Lovelace card that lets you view and control your Docker containers fro
 - Docker managed via the official Portainer integration (provides all referenced sensors, switches, and buttons)
 - Optional: For non-Portainer environments, equivalent entities (sensors, binary_sensors, switches, scripts, etc.) that expose Docker data and operations
 
-> ℹ️ This card **does not** fetch Docker data directly. It visualises data exposed through the standard Home Assistant entity model. Example helpers are included below for non-Portainer setups; if you already use the Home Assistant Portainer integration, you can plug its entities directly into the card.
+> [!IMPORTANT]   
+> This card **does not** fetch Docker data directly. It visualises data exposed through the standard Home Assistant entity model. Example helpers are included below for non-Portainer setups; if you already use the Home Assistant Portainer integration, you can plug its entities directly into the card.
 
 ## Installation
 
 ### 1. Via HACS (recommended)
-1. In Home Assistant, open **HACS (Community Store) → ⋮ → Custom repositories**.
-2. Add this repository as a **Dashboard** type and click **Add**.
-3. Locate **Docker Card** under **Frontend** and install it.
-4. Reload Lovelace resources (or restart Home Assistant) so the module is served.
+Installation is easiest via the [Home Assistant Community Store (HACS)](https://hacs.xyz/), which is the best place to get third-party integrations for Home Assistant. Once you have HACS set up, simply click the button below (requires My Homeassistant configured) or follow the [instructions for adding a custom repository](https://hacs.xyz/docs/faq/custom_repositories) and then locate **Docker Card** under **Frontend** and install it.
+
+[![](/icons/hacs.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=vineetchoudhary&repository=lovelace-docker-card&category=dashboard)
 
 
 ### 2. Manual install
@@ -36,6 +36,7 @@ A simple Lovelace card that lets you view and control your Docker containers fro
    type: module
    ```
 
+### Example Configuration
 Basic card setup (YAML) using entities exposed by the Portainer integration:
 
 ```yaml
@@ -59,6 +60,7 @@ containers:
     restart_entity: switch.docker_restart_homeassistant
     tap_action:
       action: more-info
+      entity: binary_sensor.docker_homeassistant_status
     hold_action:
       action: url
       url_path: https://portainer.local/#!/2/docker/containers/homeassistant
@@ -68,6 +70,7 @@ containers:
     restart_entity: button.docker_restart_nodered
     tap_action:
       action: toggle
+      entity: switch.docker_nodered
     hold_action:
       action: call-service
       service: script.trigger_container_diagnostics
