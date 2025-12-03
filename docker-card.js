@@ -69,6 +69,8 @@
       super();
       this.attachShadow({ mode: "open" });
       this._pending = new Map();
+      this._containersExpanded = true;
+      this._containerListId = `docker-card-containers-${cryptoRandom()}`;
     }
 
     setConfig(config) {
@@ -267,11 +269,50 @@
           gap: 0.75rem;
         }
         .section-title {
-          font-size: 0.75rem;
-          font-weight: 600;
+          font-size: 0.85rem;
+          font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.1em;
           color: var(--secondary-text-color);
+        }
+        .section-header .section-title {
+          flex: 1 1 auto;
+          text-align: left;
+        }
+        .section-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.5rem;
+          width: 100%;
+          margin: 0 0 0.5rem 0;
+          padding: 0;
+          background: none;
+          border: none;
+          color: inherit;
+          cursor: pointer;
+          font: inherit;
+        }
+        .section-header:focus-visible {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
+        .section-chevron {
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 0.35rem 0.3rem 0 0.3rem;
+          border-color: var(--secondary-text-color) transparent transparent transparent;
+          transition: transform 0.2s ease;
+        }
+        .container-section.collapsed .section-header {
+          margin-bottom: 0;
+        }
+        .container-section.collapsed .section-chevron {
+          transform: rotate(-90deg);
+        }
+        .container-section.collapsed .container-list {
+          display: none;
         }
         .container-list {
           display: flex;
@@ -375,6 +416,11 @@
           }
         }
       `;
+    }
+
+    _toggleContainers() {
+      this._containersExpanded = !this._containersExpanded;
+      this.render();
     }
 
     _buildHeader() {
@@ -518,14 +564,36 @@
     _buildContainers() {
       const section = document.createElement("div");
       section.classList.add("container-section");
+      if (!this._containersExpanded) {
+        section.classList.add("collapsed");
+      }
 
-      const title = document.createElement("div");
+      const toggleButton = document.createElement("button");
+      toggleButton.type = "button";
+      toggleButton.classList.add("section-header");
+      toggleButton.setAttribute("aria-expanded", String(this._containersExpanded));
+      toggleButton.setAttribute("aria-controls", this._containerListId);
+      toggleButton.setAttribute(
+        "aria-label",
+        this._containersExpanded ? "Collapse container list" : "Expand container list",
+      );
+      toggleButton.addEventListener("click", () => this._toggleContainers());
+
+      const title = document.createElement("span");
       title.classList.add("section-title");
       title.textContent = "Containers";
-      section.appendChild(title);
+      toggleButton.appendChild(title);
+
+      const chevron = document.createElement("span");
+      chevron.classList.add("section-chevron");
+      toggleButton.appendChild(chevron);
+
+      section.appendChild(toggleButton);
 
       const list = document.createElement("div");
       list.classList.add("container-list");
+      list.id = this._containerListId;
+      list.hidden = !this._containersExpanded;
       section.appendChild(list);
 
       const { containers } = this.config;
