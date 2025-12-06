@@ -144,7 +144,7 @@
       super();
       this.attachShadow({ mode: "open" });
       this._pending = new Map();
-      this._containersExpanded = true;
+      this._containersExpanded = false;
       this._containerListId = `docker-card-containers-${cryptoRandom()}`;
     }
 
@@ -170,6 +170,10 @@
         ...normalizedConfig,
         containers,
       };
+
+      if (typeof this.config.containers_expanded === "boolean") {
+        this._containersExpanded = this.config.containers_expanded;
+      }
 
       if (!this.config.docker_overview || typeof this.config.docker_overview !== "object") {
         this.config.docker_overview = {};

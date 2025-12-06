@@ -24,6 +24,7 @@ A simple Lovelace card that lets you monitor and control your Docker containers 
 ```yaml
 type: custom:docker-card
 title: Docker @ MyServer
+containers_expanded: false
 docker_overview:
   container_count: sensor.docker_containers_total
   containers_running: sensor.docker_containers_running

@@ -42,6 +42,7 @@ Basic card setup (YAML) using entities exposed by the Portainer integration:
 ```yaml
 type: custom:docker-card
 title: Docker @ MyServer
+containers_expanded: false
 docker_overview:
   container_count: sensor.docker_containers_total
   containers_running: sensor.docker_containers_running
@@ -90,6 +91,7 @@ You now have an interactive Docker control panel that stays in sync with Portain
 | Option | Required | Description |
 | --- | --- | --- |
 | `title` | No | Override the card header |
+| `containers_expanded` | No | Set `true` to expand or `false` (default) to collapse the container list on initial load |
 | `docker_overview` | No | Mapping of high-level stats to entity IDs |
 | `running_color` | No | Global border/accent color for running containers and status pill |
 | `not_running_color` | No | Global border/accent color for containers that are not running |
