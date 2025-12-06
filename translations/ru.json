@@ -23,6 +23,10 @@
     "collapse_containers": "Свернуть список контейнеров",
     "expand_containers": "Развернуть список контейнеров"
   },
+  "resources": {
+    "cpu": "ЦП",
+    "memory": "Память"
+  },
   "actions": {
     "start": "запустить",
     "stop": "остановить",

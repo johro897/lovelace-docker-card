@@ -23,6 +23,10 @@
     "collapse_containers": "Containerliste einklappen",
     "expand_containers": "Containerliste ausklappen"
   },
+  "resources": {
+    "cpu": "CPU",
+    "memory": "Arbeitsspeicher"
+  },
   "actions": {
     "start": "starten",
     "stop": "stoppen",

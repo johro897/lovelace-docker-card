@@ -23,6 +23,10 @@
     "collapse_containers": "कंटेनर सूची को संक्षिप्त करें",
     "expand_containers": "कंटेनर सूची को विस्तृत करें"
   },
+  "resources": {
+    "cpu": "सीपीयू",
+    "memory": "मेमोरी"
+  },
   "actions": {
     "start": "चालू करें",
     "stop": "बंद करें",

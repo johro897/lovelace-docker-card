@@ -23,6 +23,10 @@
     "collapse_containers": "コンテナ一覧を折りたたむ",
     "expand_containers": "コンテナ一覧を展開する"
   },
+  "resources": {
+    "cpu": "CPU",
+    "memory": "メモリ"
+  },
   "actions": {
     "start": "開始",
     "stop": "停止",

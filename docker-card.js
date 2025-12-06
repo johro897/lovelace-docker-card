@@ -33,6 +33,10 @@
       collapse_containers: "Collapse container list",
       expand_containers: "Expand container list",
     },
+    resources: {
+      cpu: "CPU",
+      memory: "Memory"
+    },
     actions: {
       start: "start",
       stop: "stop",
@@ -297,7 +301,7 @@
         }
         .docker-overview {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
           gap: 0.5rem;
           margin-bottom: 1.25rem;
         }
@@ -419,8 +423,8 @@
         .container-row {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          flex-wrap: wrap;
+          justify-content: flex-start;
+          flex-wrap: nowrap;
           gap: 0.75rem 1.25rem;
           padding: 0.9rem 1rem;
           border-radius: var(--ha-card-border-radius, 12px);
@@ -457,6 +461,9 @@
           font-weight: 600;
           font-size: 1rem;
           color: var(--primary-text-color);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .container-status {
           font-size: 0.85rem;
@@ -469,11 +476,31 @@
         .container-status.unknown {
           color: var(--docker-card-not-running-color, var(--state-error-color, var(--error-color, #c22040)));
         }
+        .container-resources {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem 1rem;
+          font-size: 0.75rem;
+          color: var(--secondary-text-color);
+          margin-top: 0.25rem;
+        }
+        .resource-item {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+        .resource-label {
+          font-weight: 500;
+        }
+        .resource-value {
+          font-variant-numeric: tabular-nums;
+        }
         .actions {
           display: flex;
           align-items: center;
           gap: 0.75rem;
           flex: 0 0 auto;
+          margin-left: auto;
         }
         .restart-button {
           border: 1px solid var(--divider-color, rgba(0, 0, 0, 0.12));
@@ -770,6 +797,11 @@
         state.textContent = statusInfo.label;
         infoBlock.appendChild(state);
 
+        const resources = this._buildResourceUsage(container);
+        if (resources) {
+          infoBlock.appendChild(resources);
+        }
+
         row.appendChild(infoBlock);
 
         const actions = document.createElement("div");
@@ -945,6 +977,79 @@
         container.restart_entity;
       const friendly = fallbackEntity ? this._friendlyName(fallbackEntity) : undefined;
       return friendly || this._localize("common.container");
+    }
+
+    _buildResourceUsage(container) {
+      if (!container) {
+        return null;
+      }
+
+      const cpuEntity = container.cpu_entity ? this._getEntity(container.cpu_entity) : undefined;
+      const memoryEntity = container.memory_entity ? this._getEntity(container.memory_entity) : undefined;
+
+      if (!cpuEntity && !memoryEntity) {
+        return null;
+      }
+
+      const resourcesDiv = document.createElement("div");
+      resourcesDiv.classList.add("container-resources");
+
+      if (cpuEntity) {
+        const cpuValue = this._formatPercentage(cpuEntity.state);
+        if (cpuValue !== null) {
+          const cpuItem = document.createElement("div");
+          cpuItem.classList.add("resource-item");
+
+          const cpuLabel = document.createElement("span");
+          cpuLabel.classList.add("resource-label");
+          cpuLabel.textContent = `${this._localize("resources.cpu")}:`;
+          cpuItem.appendChild(cpuLabel);
+
+          const cpuVal = document.createElement("span");
+          cpuVal.classList.add("resource-value");
+          cpuVal.textContent = cpuValue;
+          cpuItem.appendChild(cpuVal);
+
+          resourcesDiv.appendChild(cpuItem);
+        }
+      }
+
+      if (memoryEntity) {
+        const memValue = this._formatPercentage(memoryEntity.state);
+        if (memValue !== null) {
+          const memItem = document.createElement("div");
+          memItem.classList.add("resource-item");
+
+          const memLabel = document.createElement("span");
+          memLabel.classList.add("resource-label");
+          memLabel.textContent = `${this._localize("resources.memory")}:`;
+          memItem.appendChild(memLabel);
+
+          const memVal = document.createElement("span");
+          memVal.classList.add("resource-value");
+          memVal.textContent = memValue;
+          memItem.appendChild(memVal);
+
+          resourcesDiv.appendChild(memItem);
+        }
+      }
+
+      return resourcesDiv.children.length > 0 ? resourcesDiv : null;
+    }
+
+    _formatPercentage(value) {
+      if (value === undefined || value === null) {
+        return null;
+      }
+      const str = value.toString().toLowerCase();
+      if (str === "unknown" || str === "unavailable" || str === "") {
+        return null;
+      }
+      const num = parseFloat(value);
+      if (isNaN(num)) {
+        return null;
+      }
+      return `${num.toFixed(1)}%`;
     }
 
     _translationUrl(language) {

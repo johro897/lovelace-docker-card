@@ -23,6 +23,10 @@
     "collapse_containers": "طي قائمة الحاويات",
     "expand_containers": "توسيع قائمة الحاويات"
   },
+  "resources": {
+    "cpu": "وحدة المعالجة",
+    "memory": "الذاكرة"
+  },
   "actions": {
     "start": "تشغيل",
     "stop": "إيقاف",

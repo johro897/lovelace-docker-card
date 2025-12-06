@@ -23,6 +23,10 @@
     "collapse_containers": "折叠容器列表",
     "expand_containers": "展开容器列表"
   },
+  "resources": {
+    "cpu": "CPU",
+    "memory": "内存"
+  },
   "actions": {
     "start": "启动",
     "stop": "停止",

@@ -23,6 +23,10 @@
     "collapse_containers": "Réduire la liste des conteneurs",
     "expand_containers": "Développer la liste des conteneurs"
   },
+  "resources": {
+    "cpu": "CPU",
+    "memory": "Mémoire"
+  },
   "actions": {
     "start": "démarrer",
     "stop": "arrêter",
