@@ -35,7 +35,7 @@ Installation is easiest via the [Home Assistant Community Store (HACS)](https://
 
 ### 2. Manual install
 
-1. Copy everything inside the `dist/` folder (keep the `translations/` directory intact) into your Home Assistant `/config/www/docker-card/` folder.
+1. Copy everything inside the `src/` folder (keep the `translations/` directory intact) into your Home Assistant `/config/www/docker-card/` folder.
 2. Add the resource through **Settings → Dashboards → Resources → +**:
    ```yaml
    url: /local/docker-card/docker-card.js
@@ -99,6 +99,13 @@ You now have an interactive Docker control panel that stays in sync with Portain
 | `title` | No | Override the card header |
 | `containers_expanded` | No | Set `true` to expand or `false` (default) to collapse the container list on initial load |
 | `docker_overview` | No | Mapping of high-level stats to entity IDs |
+| `docker_overview.container_count` | No | Total number of containers |
+| `docker_overview.containers_running` | No | Number of running containers |
+| `docker_overview.containers_stopped` | No | Number of stopped containers |
+| `docker_overview.docker_version` | No | Docker version |
+| `docker_overview.image_count` | No | Number of Docker images |
+| `docker_overview.operating_system` | No | Operating system |
+| `docker_overview.operating_system_version` | No | Operating system version |
 | `running_color` | No | Global border/accent color for running containers and status pill |
 | `not_running_color` | No | Global border/accent color for containers that are not running |
 | `containers` | **Yes** | Array (or single object) describing each container |
@@ -242,7 +249,7 @@ Once the entities above are available, wire them into the card configuration as 
 
 ## Development
 
-- Distributed bundle lives in `dist/docker-card.js`
+- Distributed bundle lives in `src/docker-card.js`
 - No build tooling required; the published file is ready-to-serve ES2021 JavaScript
 
 ## License
