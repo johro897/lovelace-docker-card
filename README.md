@@ -2,6 +2,8 @@
 
 A simple Lovelace card that lets you view and control your Docker containers from Home Assistant. When paired with the official Home Assistant Portainer integration, every entity shown below already exists (no templates or shell commands required). Drop the card into your dashboard and manage containers without leaving Home Assistant.
 
+![](/screenshots/screenshot.png)
+
 ## Features
 
 - Compact overview of your Docker host
@@ -83,6 +85,8 @@ containers:
       action: call-service
       service: script.trigger_container_diagnostics
 ```
+
+![](/screenshots/screenshot-expanded.png)
 
 ## Quick Start (Portainer integration)
 
