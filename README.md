@@ -2,6 +2,9 @@
 - Added Icons for each container -> icon: mdi:home-assistant
 - Added image info (which images used) -> image_version_entity: sensor.docker_home_assistant_image
 - Added Icon for Health status -> health_entity: sensor.docker_home_assistant_health
+- Added possibility to have multiple columns for containers -> columns: 3
+
+When using columns the card needs to be in a vertical stack with column width equal to columns choosen, improvement needed.
 
 # Docker Card
 
