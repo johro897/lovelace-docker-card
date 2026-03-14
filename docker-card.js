@@ -179,8 +179,9 @@
       };
 
       if (typeof this.config.containers_expanded === "boolean") {
-        this._containersExpanded = this.config.containers_expanded;
+        this._containersExpanded = this.config.containers_expanded;		
       }
+	  this._columns = Math.max(1, parseInt(this.config.columns) || 1);
 
       if (!this.config.docker_overview || typeof this.config.docker_overview !== "object") {
         this.config.docker_overview = {};
@@ -418,11 +419,11 @@
         .container-section.collapsed .container-list {
           display: none;
         }
-        .container-list {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+		.container-list {
+		  display: grid;
+		  gap: 0.75rem;
+		  grid-template-columns: repeat(var(--docker-columns, 1), 1fr);
+		}
         .container-row {
           display: flex;
           align-items: center;
@@ -756,6 +757,7 @@
 
       const list = document.createElement("div");
       list.classList.add("container-list");
+	  list.style.setProperty("--docker-columns", this._columns);
       list.id = this._containerListId;
       list.hidden = !this._containersExpanded;
       section.appendChild(list);
