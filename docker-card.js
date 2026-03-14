@@ -304,11 +304,11 @@
           color: var(--primary-text-color);
         }
         .docker-overview {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-          gap: 0.5rem;
-          margin-bottom: 1.25rem;
-        }
+  		  display: grid;
+  		  grid-template-columns: repeat(var(--docker-columns, 1), 1fr);
+ 		  gap: 0.5rem;
+  		  margin-bottom: 1.25rem;
+		}
         .overview-item {
           display: flex;
           align-items: center;
@@ -686,6 +686,7 @@
 
       const overview = document.createElement("div");
       overview.classList.add("docker-overview");
+	  overview.style.setProperty("--docker-columns", this._columns);
 
       overviewItems.forEach((item) => {
         const pill = document.createElement("div");
