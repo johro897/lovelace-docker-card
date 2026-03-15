@@ -1,3 +1,5 @@
+# REPO CLOSED, moved over to https://github.com/johro897/docker-card-extended
+
 # Changes from Original version
 - Added Icons for each container -> icon: mdi:home-assistant
 - Added image info (which images used) -> image_version_entity: sensor.docker_home_assistant_image
